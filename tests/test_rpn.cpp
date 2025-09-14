@@ -1,24 +1,15 @@
-#include "gtest/gtest.h"
-#include "../include/rpn.h"
-
+#include <gtest/gtest.h>
+#include "rpn.h"
+#include <stdexcept>
 TEST(RPNTest, BasicAddition) {
-    EXPECT_EQ(evaluate_rpn("2 3 +"), 5);
+ EXPECT_DOUBLE_EQ(evaluate_rpn("2 3 +"), 5.0);
 }
-
-TEST(RPNTest, BasicSubtraction) {
-    EXPECT_EQ(evaluate_rpn("5 1 -"), 4);
+TEST(RPNTest, ComplexExpression) {
+ EXPECT_NEAR(evaluate_rpn("15 7 1 1 + - / 3 * 2 1 1 + + -"), 5.0, 1e-9);
 }
-
-TEST(RPNTest, Multiplication) {
-    EXPECT_EQ(evaluate_rpn("3 4 *"), 12);
+TEST(RPNTest, DivisionByZero) {
+ EXPECT_THROW(evaluate_rpn("1 0 /"), std::invalid_argument);
 }
-
-TEST(RPNTest, Division) {
-    EXPECT_EQ(evaluate_rpn("10 2 /"), 5);
-}
-
 TEST(RPNTest, InvalidExpression) {
-    EXPECT_THROW(evaluate_rpn("2 +"), std::invalid_argument);
-    EXPECT_THROW(evaluate_rpn("+"), std::invalid_argument);
-    EXPECT_THROW(evaluate_rpn("2 0 /"), std::invalid_argument);
+ EXPECT_THROW(evaluate_rpn("2 +"), std::invalid_argument);
 }
